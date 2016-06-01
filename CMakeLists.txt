@@ -17,6 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 find_package(Qt4 COMPONENTS QtCore QtGUi REQUIRED)
+find_package(Boost REQUIRED COMPONENTS system thread)
 
 include(${QT_USE_FILE})
 
@@ -112,6 +113,7 @@ roslint_cpp()
 catkin_package(
  LIBRARIES ${PROJECT_NAME}
  CATKIN_DEPENDS roscpp rqt_gui_cpp std_msgs
+ DEPENDS Boost
 )
 
 ###########
@@ -139,7 +141,7 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
   ${CMAKE_CURRENT_BINARY_DIR}/..
-  ${catkin_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -171,6 +173,7 @@ target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
   ${QT_QTCORE_LIBRARY}
   ${QT_QTGUI_LIBRARY}
+  ${Boost_LIBRARIES}
 )
 add_dependencies(${PROJECT_NAME} dji_sdk_generate_messages_cpp)
 

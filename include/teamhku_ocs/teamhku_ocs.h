@@ -9,6 +9,8 @@
 #include <actionlib/client/simple_action_client.h>
 #include <actionlib/client/terminal_state.h>
 #include <cstdlib>
+#include <boost/thread.hpp>
+
 
 namespace teamhku {
 
@@ -24,16 +26,29 @@ public:
   virtual void restoreSettings(const qt_gui_cpp::Settings& plugin_settings, const qt_gui_cpp::Settings& instance_settings);
 
 public Q_SLOTS:
-  void takeoff();
-  void request_control();
+  void TakeOff();
+  void RequestControl();
   // Comment in to signal that the plugin has a way to configure it
   // bool hasConfiguration() const;
   // void triggerConfiguration();
+protected Q_SLOTS:
+	void DisplayFlightStatus();
+
+signals:
+	void FlightStatusChanged();
+
+protected: 
+	void SpinThread();
+	void UIUpdateThread();
+
 private:
   Ui::MyPluginWidget ui_;
   QWidget* widget_;
   DJIDrone* drone_;
   ros::NodeHandle nh_;
+  boost::thread* spin_thread;
+  boost::thread* ui_update_thread;
+  double pre_ax_;
 };
 }  // namespace teamhku
 

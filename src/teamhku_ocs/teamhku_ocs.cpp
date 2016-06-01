@@ -1,6 +1,8 @@
 #include "teamhku_ocs/teamhku_ocs.h"
 #include <pluginlib/class_list_macros.h>
 #include <QStringList>
+#include <iostream>
+#include <unistd.h>
 
 namespace teamhku {
 
@@ -24,14 +26,36 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   ui_.setupUi(widget_);
   // add widget to the user interface
   context.addWidget(widget_);
-  connect(ui_.take_off_button_, SIGNAL (clicked()),this, SLOT (takeoff()));
-  connect(ui_.request_control_button_, SIGNAL (clicked()),this, SLOT (request_control()));
+
+  ui_.accelerationXLineEdit->setReadOnly(true);
+  ui_.accelerationYLineEdit->setReadOnly(true);
+  ui_.accelerationZLineEdit->setReadOnly(true);
+
+  ui_.gPSLatitudeLineEdit->setReadOnly(true);
+  ui_.gPSLongitudeLineEdit->setReadOnly(true);
+  ui_.gPSAltitudeLineEdit->setReadOnly(true);
+  ui_.gPSHeightLineEdit->setReadOnly(true);
+  ui_.gPSHealthLineEdit->setReadOnly(true);
+
+  pre_ax_ = 0;
+  connect(ui_.take_off_button_, SIGNAL (clicked()),this, SLOT (TakeOff()));
+  connect(ui_.request_control_button_, SIGNAL (clicked()),this, SLOT (RequestControl()));
+
+  connect(this, SIGNAL (FlightStatusChanged()), this, SLOT(DisplayFlightStatus()));
+
+
 
   drone_ = new DJIDrone(nh_);
+  spin_thread = new boost::thread(&TeamHKUOCS::SpinThread, (TeamHKUOCS*)this);
+  ui_update_thread = new boost::thread(&TeamHKUOCS::UIUpdateThread, (TeamHKUOCS*)this);
+
 }
 
 void TeamHKUOCS::shutdownPlugin()
 {
+  ros::shutdown();
+  spin_thread->join();
+  ui_update_thread->join();
   // TODO unregister all publishers here
 }
 
@@ -47,12 +71,58 @@ void TeamHKUOCS::restoreSettings(const qt_gui_cpp::Settings& plugin_settings, co
   // v = instance_settings.value(k)
 }
 
-void TeamHKUOCS::request_control()
+void TeamHKUOCS::SpinThread()
+{
+  ros::spin();
+}
+
+void TeamHKUOCS::UIUpdateThread()
+{
+  while(ros::ok())
+  {
+    emit FlightStatusChanged();
+  }
+  //std::cout << "hello world" << std::endl;
+  // double acc_x  = drone_->acceleration.ax;
+  // std::cout << drone_->acceleration.ax << std::endl;
+  // ui_.accelerationXLineEdit->insert(QString::number(acc_x));
+  // while(ros::ok())
+  // {
+  //   std::cout << "1" << std::endl;
+  // }
+  // double acc_x = 0; 
+  // while(1)
+  // {
+  //   ui_.accelerationXLineEdit->setText(QString::number(0));
+  //   acc_x = acc_x + 1;
+  //   sleep(1);
+  // }
+  
+  // std::cout << drone_->acceleration.ax << std::endl;
+  // ui_.accelerationXLineEdit->insert(QString::number(acc_x));
+  // while(ros::ok())
+  // {
+  //   //acc_x = drone_->acceleration.ax;
+  //   acc_x = acc_x + 1;
+  //   ui_.accelerationXLineEdit->setText(QString::number(acc_x));
+  //   //std::cout << acc_x << std::endl;
+  // }
+  
+}
+
+
+
+void TeamHKUOCS::DisplayFlightStatus()
+{
+  ui_.accelerationXLineEdit->setText(QString::number(drone_->acceleration.ax));
+}
+
+void TeamHKUOCS::RequestControl()
 {
   drone_->request_sdk_permission_control();
 }
 
-void TeamHKUOCS::takeoff()
+void TeamHKUOCS::TakeOff()
 {
   drone_->takeoff();
 }
