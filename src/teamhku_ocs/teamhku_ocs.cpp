@@ -46,7 +46,7 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
 
 
   drone_ = new DJIDrone(nh_);
-  spin_thread = new boost::thread(&TeamHKUOCS::SpinThread, (TeamHKUOCS*)this);
+  //spin_thread = new boost::thread(&TeamHKUOCS::SpinThread, (TeamHKUOCS*)this);
   ui_update_thread = new boost::thread(&TeamHKUOCS::UIUpdateThread, (TeamHKUOCS*)this);
 
 }
@@ -81,6 +81,7 @@ void TeamHKUOCS::UIUpdateThread()
   while(ros::ok())
   {
     emit FlightStatusChanged();
+
   }
   //std::cout << "hello world" << std::endl;
   // double acc_x  = drone_->acceleration.ax;
@@ -115,7 +116,24 @@ void TeamHKUOCS::UIUpdateThread()
 void TeamHKUOCS::DisplayFlightStatus()
 {
   ui_.accelerationXLineEdit->setText(QString::number(drone_->acceleration.ax));
+  ui_.accelerationYLineEdit->setText(QString::number(drone_->acceleration.ay));
+  ui_.accelerationZLineEdit->setText(QString::number(drone_->acceleration.az));
+  ui_.gPSLatitudeLineEdit->setText(QString::number(drone_->global_position.latitude));
+  ui_.gPSLongitudeLineEdit->setText(QString::number(drone_->global_position.longitude));
+  ui_.gPSAltitudeLineEdit->setText(QString::number(drone_->global_position.altitude));
+  ui_.gPSHeightLineEdit->setText(QString::number(drone_->global_position.height));
+  ui_.gPSHealthLineEdit->setText(QString::number(drone_->global_position.health));
+  //TODO: set a flight status array
+  // std::String flight_status_str;
+  // switch(drone_-> flight_status)
+  // {
+  //   case 1: 
+  //     flight_status_str = "Ground Standby";
+  //     break;
+  // }
+  // ui_.flightStatusLineEdit->setText(QString::number(drone_->acceleration.az));
 }
+
 
 void TeamHKUOCS::RequestControl()
 {

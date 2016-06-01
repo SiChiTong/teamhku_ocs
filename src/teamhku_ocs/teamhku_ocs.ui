@@ -13,137 +13,11 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QWidget" name="formLayoutWidget_3">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>290</y>
-     <width>251</width>
-     <height>161</height>
-    </rect>
-   </property>
-   <layout class="QFormLayout" name="formLayout_3">
-    <item row="0" column="0">
-     <widget class="QLabel" name="gPSLatitudeLabel">
-      <property name="text">
-       <string>GPS latitude</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="gPSLatitudeLineEdit"/>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="gPSLongitudeLabel">
-      <property name="text">
-       <string>GPS longitude</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="gPSLongitudeLineEdit"/>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="gPSAltitudeLabel">
-      <property name="text">
-       <string>GPS altitude</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="gPSAltitudeLineEdit"/>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="gPSHeightLabel">
-      <property name="text">
-       <string>GPS height</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="gPSHeightLineEdit"/>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="gPSHealthLabel">
-      <property name="text">
-       <string>GPS health</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QLineEdit" name="gPSHealthLineEdit"/>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="formLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>70</x>
-     <y>160</y>
-     <width>241</width>
-     <height>95</height>
-    </rect>
-   </property>
-   <layout class="QFormLayout" name="formLayout">
-    <item row="0" column="0">
-     <widget class="QLabel" name="accelerationXLabel">
-      <property name="text">
-       <string>Acceleration X:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="accelerationXLineEdit"/>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="accelerationYLabel">
-      <property name="text">
-       <string>Acceleration Y:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="accelerationYLineEdit"/>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="accelerationZLabel">
-      <property name="text">
-       <string>Acceleration Z:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="accelerationZLineEdit"/>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>70</x>
-     <y>470</y>
-     <width>241</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <item>
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Flight Statu:</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLineEdit" name="lineEdit"/>
-    </item>
-   </layout>
-  </widget>
   <widget class="QPushButton" name="request_control_button_">
    <property name="geometry">
     <rect>
-     <x>320</x>
-     <y>170</y>
+     <x>540</x>
+     <y>70</y>
      <width>181</width>
      <height>27</height>
     </rect>
@@ -155,8 +29,8 @@
   <widget class="QPushButton" name="take_off_button_">
    <property name="geometry">
     <rect>
-     <x>350</x>
-     <y>230</y>
+     <x>540</x>
+     <y>110</y>
      <width>99</width>
      <height>27</height>
     </rect>
@@ -168,8 +42,8 @@
   <widget class="QPushButton" name="land_button_">
    <property name="geometry">
     <rect>
-     <x>330</x>
-     <y>300</y>
+     <x>540</x>
+     <y>150</y>
      <width>99</width>
      <height>27</height>
     </rect>
@@ -177,6 +51,155 @@
    <property name="text">
     <string>land</string>
    </property>
+  </widget>
+  <widget class="QTabWidget" name="tabWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>521</width>
+     <height>571</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="flightStatus">
+    <attribute name="title">
+     <string>Flight Status</string>
+    </attribute>
+    <widget class="QWidget" name="formLayoutWidget_3">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>110</y>
+       <width>251</width>
+       <height>161</height>
+      </rect>
+     </property>
+     <layout class="QFormLayout" name="formLayout_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="gPSLatitudeLabel">
+        <property name="text">
+         <string>GPS latitude</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="gPSLatitudeLineEdit"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="gPSLongitudeLabel">
+        <property name="text">
+         <string>GPS longitude</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="gPSLongitudeLineEdit"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="gPSAltitudeLabel">
+        <property name="text">
+         <string>GPS altitude</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="gPSAltitudeLineEdit"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="gPSHeightLabel">
+        <property name="text">
+         <string>GPS height</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="gPSHeightLineEdit"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="gPSHealthLabel">
+        <property name="text">
+         <string>GPS health</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="gPSHealthLineEdit"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="formLayoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>241</width>
+       <height>95</height>
+      </rect>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="accelerationXLabel">
+        <property name="text">
+         <string>Acceleration X:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="accelerationXLineEdit"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="accelerationYLabel">
+        <property name="text">
+         <string>Acceleration Y:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="accelerationYLineEdit"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="accelerationZLabel">
+        <property name="text">
+         <string>Acceleration Z:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="accelerationZLineEdit"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="horizontalLayoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>280</y>
+       <width>241</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Flight Statu:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="flightStatusLineEdit"/>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="missionStatus">
+    <attribute name="title">
+     <string>Mission Status</string>
+    </attribute>
+   </widget>
   </widget>
  </widget>
  <resources/>
