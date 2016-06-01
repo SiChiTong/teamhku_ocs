@@ -1,0 +1,20 @@
+<library path="lib/libteamhku_ocs">
+  <class name="teamhku_ocs/TeamHKUOCS" type="teamhku::TeamHKUOCS" base_class_type="rqt_gui_cpp::Plugin">
+    <description>
+      TeamHKU OCS
+    </description>
+    <qtgui>
+      <!-- optional grouping...
+      <group>
+        <label>Group</label>
+      </group>
+      <group>
+        <label>Subgroup</label>
+      </group>
+      -->
+      <label>TeamHKU OCS</label>
+      <icon type="theme">system-help</icon>
+      <statustip>TeamHKU</statustip>
+    </qtgui>
+  </class>
+</library>
