@@ -11,9 +11,9 @@
 #include <cstdlib>
 #include <boost/thread.hpp>
 
+#include <string>
 
 namespace teamhku {
-
 class TeamHKUOCS
   : public rqt_gui_cpp::Plugin
 {
@@ -28,11 +28,13 @@ public:
 public Q_SLOTS:
   void TakeOff();
   void RequestControl();
+  void Land();
   // Comment in to signal that the plugin has a way to configure it
   // bool hasConfiguration() const;
   // void triggerConfiguration();
 protected Q_SLOTS:
 	void DisplayFlightStatus();
+	void DisplayPowerStatus();
 
 signals:
 	void FlightStatusChanged();
@@ -40,7 +42,7 @@ signals:
 protected: 
 	void SpinThread();
 	void UIUpdateThread();
-
+	
 private:
   Ui::MyPluginWidget ui_;
   QWidget* widget_;
@@ -48,7 +50,7 @@ private:
   ros::NodeHandle nh_;
   boost::thread* spin_thread;
   boost::thread* ui_update_thread;
-  double pre_ax_;
+  const std::string flight_status_arr_[6] = {"", "Ground Standby", "Taking Off", "Sky Standby", "Landing", "Finishing Landing"};
 };
 }  // namespace teamhku
 

@@ -4,6 +4,8 @@
 #include <iostream>
 #include <unistd.h>
 
+#include <QThread>
+
 namespace teamhku {
 
 TeamHKUOCS::TeamHKUOCS()
@@ -22,6 +24,7 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   QStringList argv = context.argv();
   // create QWidget
   widget_ = new QWidget();
+  drone_ = new DJIDrone(nh_);
   // extend the widget with all attributes and children from UI file
   ui_.setupUi(widget_);
   // add widget to the user interface
@@ -37,18 +40,19 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   ui_.gPSHeightLineEdit->setReadOnly(true);
   ui_.gPSHealthLineEdit->setReadOnly(true);
 
-  pre_ax_ = 0;
+  ui_.batteryProgressBar->setMinimum(0);
+  ui_.batteryProgressBar->setMaximum(100);
+  ui_.batteryProgressBar->setTextVisible(true);
+  ui_.batteryProgressBar->setValue(drone_->power_status.percentage);  ui_.batteryProgressBar->setValue(drone_->power_status.percentage);  ui_.batteryProgressBar->show();
+  ui_.batteryProgressBar->show();
+
   connect(ui_.take_off_button_, SIGNAL (clicked()),this, SLOT (TakeOff()));
   connect(ui_.request_control_button_, SIGNAL (clicked()),this, SLOT (RequestControl()));
-
+  connect(ui_.land_button_, SIGNAL (clicked()),this, SLOT (Land()));
   connect(this, SIGNAL (FlightStatusChanged()), this, SLOT(DisplayFlightStatus()));
 
-
-
-  drone_ = new DJIDrone(nh_);
   //spin_thread = new boost::thread(&TeamHKUOCS::SpinThread, (TeamHKUOCS*)this);
   ui_update_thread = new boost::thread(&TeamHKUOCS::UIUpdateThread, (TeamHKUOCS*)this);
-
 }
 
 void TeamHKUOCS::shutdownPlugin()
@@ -81,33 +85,8 @@ void TeamHKUOCS::UIUpdateThread()
   while(ros::ok())
   {
     emit FlightStatusChanged();
-
+    sleep(2);
   }
-  //std::cout << "hello world" << std::endl;
-  // double acc_x  = drone_->acceleration.ax;
-  // std::cout << drone_->acceleration.ax << std::endl;
-  // ui_.accelerationXLineEdit->insert(QString::number(acc_x));
-  // while(ros::ok())
-  // {
-  //   std::cout << "1" << std::endl;
-  // }
-  // double acc_x = 0; 
-  // while(1)
-  // {
-  //   ui_.accelerationXLineEdit->setText(QString::number(0));
-  //   acc_x = acc_x + 1;
-  //   sleep(1);
-  // }
-  
-  // std::cout << drone_->acceleration.ax << std::endl;
-  // ui_.accelerationXLineEdit->insert(QString::number(acc_x));
-  // while(ros::ok())
-  // {
-  //   //acc_x = drone_->acceleration.ax;
-  //   acc_x = acc_x + 1;
-  //   ui_.accelerationXLineEdit->setText(QString::number(acc_x));
-  //   //std::cout << acc_x << std::endl;
-  // }
   
 }
 
@@ -123,6 +102,8 @@ void TeamHKUOCS::DisplayFlightStatus()
   ui_.gPSAltitudeLineEdit->setText(QString::number(drone_->global_position.altitude));
   ui_.gPSHeightLineEdit->setText(QString::number(drone_->global_position.height));
   ui_.gPSHealthLineEdit->setText(QString::number(drone_->global_position.health));
+  ui_.batteryProgressBar->setValue(drone_->power_status.percentage);
+  ui_.flightStatusLineEdit->setText(QString::fromStdString(flight_status_arr_[drone_->flight_status]));
   //TODO: set a flight status array
   // std::String flight_status_str;
   // switch(drone_-> flight_status)
@@ -134,7 +115,6 @@ void TeamHKUOCS::DisplayFlightStatus()
   // ui_.flightStatusLineEdit->setText(QString::number(drone_->acceleration.az));
 }
 
-
 void TeamHKUOCS::RequestControl()
 {
   drone_->request_sdk_permission_control();
@@ -143,6 +123,10 @@ void TeamHKUOCS::RequestControl()
 void TeamHKUOCS::TakeOff()
 {
   drone_->takeoff();
+}
+void TeamHKUOCS::Land()
+{
+  drone_->landing();
 }
 /*bool hasConfiguration() const
 {
@@ -153,6 +137,8 @@ void triggerConfiguration()
 {
   // Usually used to open a dialog to offer the user a set of configuration
 }*/
+
+
 
 } // namespace
 PLUGINLIB_DECLARE_CLASS(teamhku, TeamHKUOCS, teamhku::TeamHKUOCS, rqt_gui_cpp::Plugin)
