@@ -51,6 +51,8 @@ private:
   boost::thread* spin_thread;
   boost::thread* ui_update_thread;
   const std::string flight_status_arr_[6] = {"", "Ground Standby", "Taking Off", "Sky Standby", "Landing", "Finishing Landing"};
+  const std::string control_status_arr_[4] = {"", "RC", "Mobile SDK", "Onboard SDK"};
+
 };
 }  // namespace teamhku
 

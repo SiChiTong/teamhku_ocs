@@ -40,6 +40,14 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   ui_.gPSHeightLineEdit->setReadOnly(true);
   ui_.gPSHealthLineEdit->setReadOnly(true);
 
+  ui_.velocityXLineEdit->setReadOnly(true);
+  ui_.velocityYLineEdit->setReadOnly(true);
+  ui_.velocityZLineEdit->setReadOnly(true);
+
+  ui_.localXLineEdit->setReadOnly(true);
+  ui_.localYLineEdit->setReadOnly(true);
+  ui_.localZLineEdit->setReadOnly(true);
+
   ui_.batteryProgressBar->setMinimum(0);
   ui_.batteryProgressBar->setMaximum(100);
   ui_.batteryProgressBar->setTextVisible(true);
@@ -85,7 +93,7 @@ void TeamHKUOCS::UIUpdateThread()
   while(ros::ok())
   {
     emit FlightStatusChanged();
-    sleep(2);
+    sleep(1);
   }
   
 }
@@ -102,8 +110,21 @@ void TeamHKUOCS::DisplayFlightStatus()
   ui_.gPSAltitudeLineEdit->setText(QString::number(drone_->global_position.altitude));
   ui_.gPSHeightLineEdit->setText(QString::number(drone_->global_position.height));
   ui_.gPSHealthLineEdit->setText(QString::number(drone_->global_position.health));
+
+  ui_.velocityXLineEdit->setText(QString::number(drone_->velocity.vx));
+  ui_.velocityYLineEdit->setText(QString::number(drone_->velocity.vy));
+  ui_.velocityZLineEdit->setText(QString::number(drone_->velocity.vz));
+
+  ui_.localXLineEdit->setText(QString::number(drone_->local_position.x));
+  ui_.localYLineEdit->setText(QString::number(drone_->local_position.y));
+  ui_.localZLineEdit->setText(QString::number(drone_->local_position.z));
+
   ui_.batteryProgressBar->setValue(drone_->power_status.percentage);
+
   ui_.flightStatusLineEdit->setText(QString::fromStdString(flight_status_arr_[drone_->flight_status]));
+
+  ui_.controlModeLineEdit->setText(QString::fromStdString(control_status_arr_[drone_->flight_control_info.control_mode]));
+  // std::cout << drone_->flight_control_info.control_mode << std::endl;
   //TODO: set a flight status array
   // std::String flight_status_str;
   // switch(drone_-> flight_status)
