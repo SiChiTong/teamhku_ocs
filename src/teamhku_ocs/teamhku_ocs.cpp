@@ -3,6 +3,7 @@
 #include <QStringList>
 #include <iostream>
 #include <unistd.h>
+#include <cmath>
 
 #include <QThread>
 
@@ -56,6 +57,7 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
 
   connect(ui_.take_off_button_, SIGNAL (clicked()),this, SLOT (TakeOff()));
   connect(ui_.request_control_button_, SIGNAL (clicked()),this, SLOT (RequestControl()));
+  connect(ui_.release_control_button_, SIGNAL (clicked()),this, SLOT (ReleaseControl()));
   connect(ui_.land_button_, SIGNAL (clicked()),this, SLOT (Land()));
   connect(this, SIGNAL (FlightStatusChanged()), this, SLOT(DisplayFlightStatus()));
 
@@ -91,6 +93,7 @@ void TeamHKUOCS::SpinThread()
 void TeamHKUOCS::UIUpdateThread()
 {
   bool status_change = false;
+  QString prev = QString::number(0);
   while(ros::ok())
   {
     if (status_change)
@@ -98,92 +101,19 @@ void TeamHKUOCS::UIUpdateThread()
       emit FlightStatusChanged();
     }
     status_change = false;
-    if (ui_.accelerationXLineEdit->text() != (QString::number(drone_->acceleration.ax)))
+    if (prev != (QString::number(drone_->acceleration.ax)))
     {
       status_change = true;
-      continue;
-    }
-    if (ui_.accelerationYLineEdit->text() != (QString::number(drone_->acceleration.ay)))
-    {
-      status_change = true;
-      continue;
-    }
-    if (ui_.accelerationZLineEdit->text() != (QString::number(drone_->acceleration.az)))
-    {
-      status_change = true;
-      continue;
-    }
-    if (ui_.gPSLatitudeLineEdit->text() != (QString::number(drone_->global_position.latitude)))
-    {
-      status_change = true;
-      continue;
-    }
-    if (ui_.gPSLongitudeLineEdit->text() != (QString::number(drone_->global_position.longitude)))
-    {
-      status_change = true;
-      continue;
-    }
-    if (ui_.gPSAltitudeLineEdit->text() != (QString::number(drone_->global_position.altitude)))
-    {
-      status_change = true;
-      continue;
-    }
-    if (ui_.gPSHeightLineEdit->text() != (QString::number(drone_->global_position.height)))
-    {
-      status_change = true;
-      continue;
-    }
-    if (ui_.gPSHealthLineEdit->text() != (QString::number(drone_->global_position.health)))
-    {
-      status_change = true;
-      continue;
-    }
-    if (ui_.velocityXLineEdit->text() != (QString::number(drone_->velocity.vx)))
-    {
-      status_change = true;
-      continue;
-    }
-    if (ui_.velocityYLineEdit->text() != (QString::number(drone_->velocity.vy)))
-    {
-      status_change = true;
-      continue;
-    }
-    if (ui_.velocityZLineEdit->text() != (QString::number(drone_->velocity.vz)))
-    {
-      status_change = true;
-      continue;
-    }
-    if (ui_.localXLineEdit->text() != (QString::number(drone_->local_position.x)))
-    {
-      status_change = true;
-      continue;
-    }
-    if (ui_.localYLineEdit->text() != (QString::number(drone_->local_position.y)))
-    {
-      status_change = true;
-      continue;
-    }
-    if (ui_.localZLineEdit->text() != (QString::number(drone_->local_position.z)))
-    {
-      status_change = true;
-      continue;
-    }
-    if (ui_.batteryProgressBar->value() != (drone_->power_status.percentage))
-    {
-      status_change = true;
+      prev = QString::number(drone_->acceleration.ax);
       continue;
     }
     if (ui_.flightStatusLineEdit->text() != (QString::fromStdString(flight_status_arr_[drone_->flight_status])))
     {
       status_change = true;
+      prev = QString::number(drone_->acceleration.ax);
       continue;
     }
-    if (ui_.controlModeLineEdit->text() != (QString::fromStdString(control_status_arr_[drone_->flight_control_info.control_mode])))
-    {
-      status_change = true;
-      continue;
-    }
-
+    sleep(0.01);
   }
   
 }
@@ -192,22 +122,22 @@ void TeamHKUOCS::UIUpdateThread()
 
 void TeamHKUOCS::DisplayFlightStatus()
 {
-  ui_.accelerationXLineEdit->setText(QString::number(drone_->acceleration.ax));
-  ui_.accelerationYLineEdit->setText(QString::number(drone_->acceleration.ay));
-  ui_.accelerationZLineEdit->setText(QString::number(drone_->acceleration.az));
+  ui_.accelerationXLineEdit->setText(QString::number(round(drone_->acceleration.ax*10)/10));
+  ui_.accelerationYLineEdit->setText(QString::number(round(drone_->acceleration.ay*10)/10));
+  ui_.accelerationZLineEdit->setText(QString::number(round(drone_->acceleration.az*10)/10));
   ui_.gPSLatitudeLineEdit->setText(QString::number(drone_->global_position.latitude));
   ui_.gPSLongitudeLineEdit->setText(QString::number(drone_->global_position.longitude));
   ui_.gPSAltitudeLineEdit->setText(QString::number(drone_->global_position.altitude));
   ui_.gPSHeightLineEdit->setText(QString::number(drone_->global_position.height));
   ui_.gPSHealthLineEdit->setText(QString::number(drone_->global_position.health));
 
-  ui_.velocityXLineEdit->setText(QString::number(drone_->velocity.vx));
-  ui_.velocityYLineEdit->setText(QString::number(drone_->velocity.vy));
-  ui_.velocityZLineEdit->setText(QString::number(drone_->velocity.vz));
+  ui_.velocityXLineEdit->setText(QString::number(round(drone_->velocity.vx*10)/10));
+  ui_.velocityYLineEdit->setText(QString::number(round(drone_->velocity.vy*10)/10));
+  ui_.velocityZLineEdit->setText(QString::number(round(drone_->velocity.vz*10)/10));
 
-  ui_.localXLineEdit->setText(QString::number(drone_->local_position.x));
-  ui_.localYLineEdit->setText(QString::number(drone_->local_position.y));
-  ui_.localZLineEdit->setText(QString::number(drone_->local_position.z));
+  ui_.localXLineEdit->setText(QString::number(round(drone_->local_position.x*100)/100));
+  ui_.localYLineEdit->setText(QString::number(round(drone_->local_position.y*100)/100));
+  ui_.localZLineEdit->setText(QString::number(round(drone_->local_position.z*100)/100));
 
   ui_.batteryProgressBar->setValue(drone_->power_status.percentage);
 
@@ -229,6 +159,11 @@ void TeamHKUOCS::DisplayFlightStatus()
 void TeamHKUOCS::RequestControl()
 {
   drone_->request_sdk_permission_control();
+}
+
+void TeamHKUOCS::ReleaseControl()
+{
+  drone_->release_sdk_permission_control();
 }
 
 void TeamHKUOCS::TakeOff()

@@ -146,7 +146,7 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Flight Statu:</string>
+         <string>Flight Status:</string>
         </property>
        </widget>
       </item>
@@ -363,7 +363,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">

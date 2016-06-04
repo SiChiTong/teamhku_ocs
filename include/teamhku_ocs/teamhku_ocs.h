@@ -28,6 +28,7 @@ public:
 public Q_SLOTS:
   void TakeOff();
   void RequestControl();
+  void ReleaseControl();
   void Land();
   // Comment in to signal that the plugin has a way to configure it
   // bool hasConfiguration() const;
