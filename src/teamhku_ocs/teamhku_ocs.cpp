@@ -90,10 +90,100 @@ void TeamHKUOCS::SpinThread()
 
 void TeamHKUOCS::UIUpdateThread()
 {
+  bool status_change = false;
   while(ros::ok())
   {
-    emit FlightStatusChanged();
-    sleep(1);
+    if (status_change)
+    {
+      emit FlightStatusChanged();
+    }
+    status_change = false;
+    if (ui_.accelerationXLineEdit->text() != (QString::number(drone_->acceleration.ax)))
+    {
+      status_change = true;
+      continue;
+    }
+    if (ui_.accelerationYLineEdit->text() != (QString::number(drone_->acceleration.ay)))
+    {
+      status_change = true;
+      continue;
+    }
+    if (ui_.accelerationZLineEdit->text() != (QString::number(drone_->acceleration.az)))
+    {
+      status_change = true;
+      continue;
+    }
+    if (ui_.gPSLatitudeLineEdit->text() != (QString::number(drone_->global_position.latitude)))
+    {
+      status_change = true;
+      continue;
+    }
+    if (ui_.gPSLongitudeLineEdit->text() != (QString::number(drone_->global_position.longitude)))
+    {
+      status_change = true;
+      continue;
+    }
+    if (ui_.gPSAltitudeLineEdit->text() != (QString::number(drone_->global_position.altitude)))
+    {
+      status_change = true;
+      continue;
+    }
+    if (ui_.gPSHeightLineEdit->text() != (QString::number(drone_->global_position.height)))
+    {
+      status_change = true;
+      continue;
+    }
+    if (ui_.gPSHealthLineEdit->text() != (QString::number(drone_->global_position.health)))
+    {
+      status_change = true;
+      continue;
+    }
+    if (ui_.velocityXLineEdit->text() != (QString::number(drone_->velocity.vx)))
+    {
+      status_change = true;
+      continue;
+    }
+    if (ui_.velocityYLineEdit->text() != (QString::number(drone_->velocity.vy)))
+    {
+      status_change = true;
+      continue;
+    }
+    if (ui_.velocityZLineEdit->text() != (QString::number(drone_->velocity.vz)))
+    {
+      status_change = true;
+      continue;
+    }
+    if (ui_.localXLineEdit->text() != (QString::number(drone_->local_position.x)))
+    {
+      status_change = true;
+      continue;
+    }
+    if (ui_.localYLineEdit->text() != (QString::number(drone_->local_position.y)))
+    {
+      status_change = true;
+      continue;
+    }
+    if (ui_.localZLineEdit->text() != (QString::number(drone_->local_position.z)))
+    {
+      status_change = true;
+      continue;
+    }
+    if (ui_.batteryProgressBar->value() != (drone_->power_status.percentage))
+    {
+      status_change = true;
+      continue;
+    }
+    if (ui_.flightStatusLineEdit->text() != (QString::fromStdString(flight_status_arr_[drone_->flight_status])))
+    {
+      status_change = true;
+      continue;
+    }
+    if (ui_.controlModeLineEdit->text() != (QString::fromStdString(control_status_arr_[drone_->flight_control_info.control_mode])))
+    {
+      status_change = true;
+      continue;
+    }
+
   }
   
 }
