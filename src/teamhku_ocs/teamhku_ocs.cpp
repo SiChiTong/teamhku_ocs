@@ -103,7 +103,7 @@ void TeamHKUOCS::UIUpdateThread()
   bool status_change = false;
   bool UI_change = false;
   QString prev_acc = QString::number(0);
-  int prev_control = -1, prev_status = 0;
+  int prev_battery = 0, prev_control = -1, prev_status = 0;
   while(ros::ok())
   {
     status_change = false;
@@ -116,7 +116,11 @@ void TeamHKUOCS::UIUpdateThread()
     if (ui_.flightStatusLineEdit->text() != (QString::fromStdString(flight_status_arr_[drone_->flight_status])))
     {
       status_change = true;
-      prev_acc = QString::number(drone_->acceleration.ax);
+    }
+    if (prev_battery != drone_->power_status.percentage)
+    {
+      status_change = true;
+      prev_battery = drone_->power_status.percentage;
     }
 
     if (prev_control != drone_->flight_control_info.cur_ctrl_dev_in_navi_mode)
