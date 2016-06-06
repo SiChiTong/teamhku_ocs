@@ -1,6 +1,7 @@
 #include "teamhku_ocs/teamhku_ocs.h"
 #include <pluginlib/class_list_macros.h>
 #include <QStringList>
+#include <QColor>
 #include <iostream>
 #include <unistd.h>
 #include <cmath>
@@ -26,7 +27,6 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   // create QWidget
   widget_ = new QWidget();
   drone_ = new DJIDrone(nh_);
-  // extend the widget with all attributes and children from UI file
   ui_.setupUi(widget_);
   // add widget to the user interface
   context.addWidget(widget_);
@@ -39,8 +39,8 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   ui_.gPSLongitudeLineEdit->setReadOnly(true);
   ui_.gPSAltitudeLineEdit->setReadOnly(true);
   ui_.gPSHeightLineEdit->setReadOnly(true);
-  ui_.gPSHealthLineEdit->setReadOnly(true);
 
+  ui_.gPSHealthLineEdit->setReadOnly(true);
   ui_.velocityXLineEdit->setReadOnly(true);
   ui_.velocityYLineEdit->setReadOnly(true);
   ui_.velocityZLineEdit->setReadOnly(true);
@@ -52,9 +52,12 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   ui_.batteryProgressBar->setMinimum(0);
   ui_.batteryProgressBar->setMaximum(100);
   ui_.batteryProgressBar->setTextVisible(true);
-  ui_.batteryProgressBar->setValue(drone_->power_status.percentage);  ui_.batteryProgressBar->setValue(drone_->power_status.percentage);  ui_.batteryProgressBar->show();
+  ui_.batteryProgressBar->setValue(drone_->power_status.percentage);  
+  ui_.batteryProgressBar->setValue(drone_->power_status.percentage);  
+  ui_.batteryProgressBar->show();
   ui_.batteryProgressBar->show();
 
+  // disable unuseful button
   ui_.release_control_button_->setEnabled(false);
   ui_.take_off_button_->setEnabled(false);
   ui_.land_button_->setEnabled(false);
@@ -62,12 +65,21 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   ui_.move_gimbal_button_->setEnabled(false);
   ui_.local_navigation_button_->setEnabled(false);
 
+  // set color for the emergency button
+  ui_.estop_button_->setAutoFillBackground(true);
+  ui_.estop_button_->setStyleSheet("border-image: url(/home/sunbacon/catkin_ws/src/teamhku_ocs/src/teamhku_ocs/large-red-circle.png) 15 15 15 15; border-radius: 45px;");
+  ui_.estop_button_->show();
+
   connect(ui_.take_off_button_, SIGNAL (clicked()),this, SLOT (TakeOff()));
   connect(ui_.request_control_button_, SIGNAL (clicked()),this, SLOT (RequestControl()));
   connect(ui_.release_control_button_, SIGNAL (clicked()),this, SLOT (ReleaseControl()));
   connect(ui_.land_button_, SIGNAL (clicked()),this, SLOT (Land()));
+  connect(ui_.estop_button_, SIGNAL (clicked()),this, SLOT (E_Handler()));
+  connect(ui_.go_home_button_, SIGNAL (clicked()),this, SLOT (GoHome()));
+  connect(ui_.local_navigation_button_, SIGNAL (clicked()), this, SLOT (LocalNavigation()));
   connect(this, SIGNAL (FlightStatusChanged()), this, SLOT(DisplayFlightStatus()));
   connect(this, SIGNAL (UILogicChanged()), this, SLOT(ChangeButton()));
+
 
   //spin_thread = new boost::thread(&TeamHKUOCS::SpinThread, (TeamHKUOCS*)this);
   ui_update_thread = new boost::thread(&TeamHKUOCS::UIUpdateThread, (TeamHKUOCS*)this);
@@ -255,6 +267,29 @@ void TeamHKUOCS::Land()
 {
   drone_->landing();
 }
+
+void TeamHKUOCS::E_Handler()
+{
+  drone_->request_sdk_permission_control();
+  drone_->local_position_navigation_cancel_all_goals();
+  drone_->global_position_navigation_cancel_all_goals();
+  drone_->waypoint_navigation_cancel_all_goals();
+  drone_->mission_cancel();
+  drone_->velocity_control(0, 0, 0, 0, 0);
+  drone_->release_sdk_permission_control();
+  
+}
+
+void TeamHKUOCS::GoHome()
+{
+  drone_->gohome();
+}
+
+void TeamHKUOCS::LocalNavigation()
+{
+  drone_->local_position_navigation_send_request(ui_.localXLineEdit_2->text().toDouble(), ui_.localYLineEdit_2->text().toDouble(), ui_.localZLineEdit_2->text().toDouble());
+}
+
 /*bool hasConfiguration() const
 {
   return true;

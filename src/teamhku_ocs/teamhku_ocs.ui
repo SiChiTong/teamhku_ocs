@@ -554,6 +554,22 @@
       <string>Local Navigation</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="estop_button_">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>350</y>
+       <width>91</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>true</bool>
+     </property>
+     <property name="text">
+      <string>E-Stop</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">

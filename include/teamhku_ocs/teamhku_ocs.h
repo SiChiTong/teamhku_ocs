@@ -12,7 +12,6 @@
 #include <boost/thread.hpp>
 
 #include <string>
-
 namespace teamhku {
 class TeamHKUOCS
   : public rqt_gui_cpp::Plugin
@@ -30,6 +29,10 @@ public Q_SLOTS:
   void RequestControl();
   void ReleaseControl();
   void Land();
+  void E_Handler();
+  void GoHome();
+  void LocalNavigation();
+
   // Comment in to signal that the plugin has a way to configure it
   // bool hasConfiguration() const;
   // void triggerConfiguration();
@@ -37,6 +40,7 @@ protected Q_SLOTS:
 	void DisplayFlightStatus();
 	void DisplayPowerStatus();
   void ChangeButton();
+
 
 signals:
 	void FlightStatusChanged();
@@ -50,11 +54,13 @@ private:
   Ui::MyPluginWidget ui_;
   QWidget* widget_;
   DJIDrone* drone_;
+  DJI::onboardSDK::VirtualRC* VRC_;
   ros::NodeHandle nh_;
   boost::thread* spin_thread;
   boost::thread* ui_update_thread;
   const std::string flight_status_arr_[6] = {"", "Ground Standby", "Taking Off", "Sky Standby", "Landing", "Finishing Landing"};
   const std::string control_status_arr_[3] = {"RC", "Mobile SDK", "Onboard SDK"};
+  uint32_t channel_data[16] = {0};
 
 };
 }  // namespace teamhku
