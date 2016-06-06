@@ -405,7 +405,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Release  control</string>
+      <string>release  control</string>
      </property>
     </widget>
     <widget class="QPushButton" name="land_button_">
@@ -486,7 +486,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="move_gimbal_button_">
      <property name="geometry">
       <rect>
        <x>230</x>
@@ -541,7 +541,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QPushButton" name="pushButton_2">
+    <widget class="QPushButton" name="local_navigation_button_">
      <property name="geometry">
       <rect>
        <x>10</x>

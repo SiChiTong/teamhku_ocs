@@ -55,11 +55,19 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   ui_.batteryProgressBar->setValue(drone_->power_status.percentage);  ui_.batteryProgressBar->setValue(drone_->power_status.percentage);  ui_.batteryProgressBar->show();
   ui_.batteryProgressBar->show();
 
+  ui_.release_control_button_->setEnabled(false);
+  ui_.take_off_button_->setEnabled(false);
+  ui_.land_button_->setEnabled(false);
+  ui_.go_home_button_->setEnabled(false);
+  ui_.move_gimbal_button_->setEnabled(false);
+  ui_.local_navigation_button_->setEnabled(false);
+
   connect(ui_.take_off_button_, SIGNAL (clicked()),this, SLOT (TakeOff()));
   connect(ui_.request_control_button_, SIGNAL (clicked()),this, SLOT (RequestControl()));
   connect(ui_.release_control_button_, SIGNAL (clicked()),this, SLOT (ReleaseControl()));
   connect(ui_.land_button_, SIGNAL (clicked()),this, SLOT (Land()));
   connect(this, SIGNAL (FlightStatusChanged()), this, SLOT(DisplayFlightStatus()));
+  connect(this, SIGNAL (UILogicChanged()), this, SLOT(ChangeButton()));
 
   //spin_thread = new boost::thread(&TeamHKUOCS::SpinThread, (TeamHKUOCS*)this);
   ui_update_thread = new boost::thread(&TeamHKUOCS::UIUpdateThread, (TeamHKUOCS*)this);
@@ -93,31 +101,47 @@ void TeamHKUOCS::SpinThread()
 void TeamHKUOCS::UIUpdateThread()
 {
   bool status_change = false;
-  QString prev = QString::number(0);
+  bool UI_change = false;
+  QString prev_acc = QString::number(0);
+  int prev_control = -1, prev_status = 0;
   while(ros::ok())
   {
-    if (status_change)
-    {
-      emit FlightStatusChanged();
-    }
     status_change = false;
-    if (prev != (QString::number(drone_->acceleration.ax)))
+    UI_change = false;
+    if (prev_acc != (QString::number(drone_->acceleration.ax)))
     {
       status_change = true;
-      prev = QString::number(drone_->acceleration.ax);
-      continue;
+      prev_acc = QString::number(drone_->acceleration.ax);
     }
     if (ui_.flightStatusLineEdit->text() != (QString::fromStdString(flight_status_arr_[drone_->flight_status])))
     {
       status_change = true;
-      prev = QString::number(drone_->acceleration.ax);
-      continue;
+      prev_acc = QString::number(drone_->acceleration.ax);
+    }
+
+    if (prev_control != drone_->flight_control_info.cur_ctrl_dev_in_navi_mode)
+    {
+      UI_change = true;
+      prev_control = drone_->flight_control_info.cur_ctrl_dev_in_navi_mode;
+    }
+    if (prev_status != drone_->flight_status)
+    {
+      UI_change = true;
+      prev_status = drone_->flight_status;
+    }
+
+    if (status_change)
+    {
+      emit FlightStatusChanged();
+    }
+    if (UI_change)
+    {
+      emit UILogicChanged();
     }
     sleep(0.01);
   }
   
 }
-
 
 
 void TeamHKUOCS::DisplayFlightStatus()
@@ -143,7 +167,7 @@ void TeamHKUOCS::DisplayFlightStatus()
 
   ui_.flightStatusLineEdit->setText(QString::fromStdString(flight_status_arr_[drone_->flight_status]));
 
-  ui_.controlModeLineEdit->setText(QString::fromStdString(control_status_arr_[drone_->flight_control_info.control_mode]));
+  
   // std::cout << drone_->flight_control_info.control_mode << std::endl;
   //TODO: set a flight status array
   // std::String flight_status_str;
@@ -154,6 +178,58 @@ void TeamHKUOCS::DisplayFlightStatus()
   //     break;
   // }
   // ui_.flightStatusLineEdit->setText(QString::number(drone_->acceleration.az));
+}
+
+void TeamHKUOCS::ChangeButton()
+{
+  if (drone_->flight_control_info.cur_ctrl_dev_in_navi_mode == 2)
+  {
+    ui_.release_control_button_->setEnabled(true);
+    ui_.request_control_button_->setEnabled(false);
+  }
+  else
+  {
+    ui_.release_control_button_->setEnabled(false);
+    ui_.request_control_button_->setEnabled(true);
+  }
+
+  if (ui_.release_control_button_->isEnabled())
+  {
+    if (drone_->flight_status == 1)
+    {
+      ui_.take_off_button_->setEnabled(true);
+      ui_.land_button_->setEnabled(false);
+      ui_.go_home_button_->setEnabled(false);
+      ui_.move_gimbal_button_->setEnabled(false);
+      ui_.local_navigation_button_->setEnabled(false);
+    }
+    else if (drone_->flight_status == 3)
+    {
+      ui_.take_off_button_->setEnabled(false);
+      ui_.land_button_->setEnabled(true);
+      ui_.go_home_button_->setEnabled(true);
+      ui_.move_gimbal_button_->setEnabled(true);
+      ui_.local_navigation_button_->setEnabled(true);
+    }
+    else
+    {
+      ui_.take_off_button_->setEnabled(false);
+      ui_.land_button_->setEnabled(false);
+      ui_.go_home_button_->setEnabled(false);
+      ui_.move_gimbal_button_->setEnabled(false);
+      ui_.local_navigation_button_->setEnabled(false);
+    }
+  }
+  else
+  {
+    ui_.take_off_button_->setEnabled(false);
+    ui_.land_button_->setEnabled(false);
+    ui_.go_home_button_->setEnabled(false);
+    ui_.move_gimbal_button_->setEnabled(false);
+    ui_.local_navigation_button_->setEnabled(false);
+  }
+
+  ui_.controlModeLineEdit->setText(QString::fromStdString(control_status_arr_[drone_->flight_control_info.cur_ctrl_dev_in_navi_mode]));
 }
 
 void TeamHKUOCS::RequestControl()
@@ -170,6 +246,7 @@ void TeamHKUOCS::TakeOff()
 {
   drone_->takeoff();
 }
+
 void TeamHKUOCS::Land()
 {
   drone_->landing();

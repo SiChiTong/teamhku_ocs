@@ -36,9 +36,11 @@ public Q_SLOTS:
 protected Q_SLOTS:
 	void DisplayFlightStatus();
 	void DisplayPowerStatus();
+  void ChangeButton();
 
 signals:
 	void FlightStatusChanged();
+  void UILogicChanged();
 
 protected: 
 	void SpinThread();
@@ -52,7 +54,7 @@ private:
   boost::thread* spin_thread;
   boost::thread* ui_update_thread;
   const std::string flight_status_arr_[6] = {"", "Ground Standby", "Taking Off", "Sky Standby", "Landing", "Finishing Landing"};
-  const std::string control_status_arr_[4] = {"", "RC", "Mobile SDK", "Onboard SDK"};
+  const std::string control_status_arr_[3] = {"RC", "Mobile SDK", "Onboard SDK"};
 
 };
 }  // namespace teamhku
