@@ -570,6 +570,61 @@
       <string>E-Stop</string>
      </property>
     </widget>
+    <widget class="QWidget" name="formLayoutWidget_7">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>210</y>
+       <width>161</width>
+       <height>95</height>
+      </rect>
+     </property>
+     <layout class="QFormLayout" name="formLayout_7">
+      <item row="0" column="0">
+       <widget class="QLabel" name="localXLabel_3">
+        <property name="text">
+         <string>Global X goal:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="globalXLineEdit_"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="localYLabel_3">
+        <property name="text">
+         <string>Global Y goal:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="globalYLineEdit_"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="localZLabel_3">
+        <property name="text">
+         <string>Global Z goal:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="globalZLineEdit_"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QPushButton" name="global_navigation_button_">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>310</y>
+       <width>131</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Global Navigation</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">

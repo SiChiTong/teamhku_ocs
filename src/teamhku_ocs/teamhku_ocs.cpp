@@ -77,6 +77,7 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   connect(ui_.estop_button_, SIGNAL (clicked()),this, SLOT (E_Handler()));
   connect(ui_.go_home_button_, SIGNAL (clicked()),this, SLOT (GoHome()));
   connect(ui_.local_navigation_button_, SIGNAL (clicked()), this, SLOT (LocalNavigation()));
+  connect(ui_.global_navigation_button_, SIGNAL (clicked()), this, SLOT (GlobalNavigation()));
   connect(this, SIGNAL (FlightStatusChanged()), this, SLOT(DisplayFlightStatus()));
   connect(this, SIGNAL (UILogicChanged()), this, SLOT(ChangeButton()));
 
@@ -218,6 +219,7 @@ void TeamHKUOCS::ChangeButton()
       ui_.go_home_button_->setEnabled(false);
       ui_.move_gimbal_button_->setEnabled(false);
       ui_.local_navigation_button_->setEnabled(false);
+      ui_.global_navigation_button_->setEnabled(false);
     }
     else if (drone_->flight_status == 3)
     {
@@ -226,6 +228,7 @@ void TeamHKUOCS::ChangeButton()
       ui_.go_home_button_->setEnabled(true);
       ui_.move_gimbal_button_->setEnabled(true);
       ui_.local_navigation_button_->setEnabled(true);
+      ui_.global_navigation_button_->setEnabled(true);
     }
     else
     {
@@ -234,6 +237,7 @@ void TeamHKUOCS::ChangeButton()
       ui_.go_home_button_->setEnabled(false);
       ui_.move_gimbal_button_->setEnabled(false);
       ui_.local_navigation_button_->setEnabled(false);
+      ui_.global_navigation_button_->setEnabled(false);
     }
   }
   else
@@ -243,6 +247,7 @@ void TeamHKUOCS::ChangeButton()
     ui_.go_home_button_->setEnabled(false);
     ui_.move_gimbal_button_->setEnabled(false);
     ui_.local_navigation_button_->setEnabled(false);
+    ui_.global_navigation_button_->setEnabled(false);
   }
 
   ui_.controlModeLineEdit->setText(QString::fromStdString(control_status_arr_[drone_->flight_control_info.cur_ctrl_dev_in_navi_mode]));
@@ -288,6 +293,11 @@ void TeamHKUOCS::GoHome()
 void TeamHKUOCS::LocalNavigation()
 {
   drone_->local_position_navigation_send_request(ui_.localXLineEdit_2->text().toDouble(), ui_.localYLineEdit_2->text().toDouble(), ui_.localZLineEdit_2->text().toDouble());
+}
+
+void TeamHKUOCS::GlobalNavigation()
+{
+  drone_->global_position_navigation_send_request(ui_.globalXLineEdit_->text().toDouble(), ui_.globalYLineEdit_->text().toDouble(), ui_.globalZLineEdit_->text().toDouble());
 }
 
 /*bool hasConfiguration() const

@@ -32,6 +32,7 @@ public Q_SLOTS:
   void E_Handler();
   void GoHome();
   void LocalNavigation();
+  void GlobalNavigation();
 
   // Comment in to signal that the plugin has a way to configure it
   // bool hasConfiguration() const;
