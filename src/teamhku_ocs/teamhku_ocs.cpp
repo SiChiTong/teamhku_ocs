@@ -5,6 +5,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <cmath>
+#include <time.h>
 
 #include <QThread>
 
@@ -78,6 +79,8 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   connect(ui_.go_home_button_, SIGNAL (clicked()),this, SLOT (GoHome()));
   connect(ui_.local_navigation_button_, SIGNAL (clicked()), this, SLOT (LocalNavigation()));
   connect(ui_.global_navigation_button_, SIGNAL (clicked()), this, SLOT (GlobalNavigation()));
+  connect(ui_.rosbag_button_, SIGNAL (clicked()), this, SLOT (RosbagRecord()));
+  connect(ui_.rosstop_button_, SIGNAL (clicked()), this, SLOT (RosbagRecordStop()));
   connect(this, SIGNAL (FlightStatusChanged()), this, SLOT(DisplayFlightStatus()));
   connect(this, SIGNAL (UILogicChanged()), this, SLOT(ChangeButton()));
 
@@ -91,6 +94,7 @@ void TeamHKUOCS::shutdownPlugin()
   ros::shutdown();
   spin_thread->join();
   ui_update_thread->join();
+  ui_record_thread->join();
   // TODO unregister all publishers here
 }
 
@@ -298,6 +302,30 @@ void TeamHKUOCS::LocalNavigation()
 void TeamHKUOCS::GlobalNavigation()
 {
   drone_->global_position_navigation_send_request(ui_.globalXLineEdit_->text().toDouble(), ui_.globalYLineEdit_->text().toDouble(), ui_.globalZLineEdit_->text().toDouble());
+}
+
+
+void TeamHKUOCS::RecordThread()
+{
+  std::string date;
+  std::time_t nowtime;
+  struct tm *local;
+  nowtime = time(NULL);
+  local=localtime(&nowtime);
+  date = "rosbag record -a -O ~/bagfiles/" + std::to_string(local->tm_year+1900) + "-" + (local->tm_mon < 9 ? "0"+std::to_string(local->tm_mon+1) : std::to_string(local->tm_mon+1)) + "-" + (local->tm_mday < 10 ? "0"+std::to_string(local->tm_mday) : std::to_string(local->tm_mday)) + "-" + (local->tm_hour < 10 ? "0"+std::to_string(local->tm_hour) : std::to_string(local->tm_hour)) + "-" + (local->tm_min < 10 ? "0"+std::to_string(local->tm_min) : std::to_string(local->tm_min)) + "-" + (local->tm_sec < 10 ? "0"+std::to_string(local->tm_sec) : std::to_string(local->tm_sec)) + ".bag";
+  std::cout << date;
+  system(date.c_str());
+}
+
+
+void TeamHKUOCS::RosbagRecord()
+{
+  ui_record_thread = new boost::thread(&TeamHKUOCS::RecordThread, (TeamHKUOCS*)this);
+}
+
+void TeamHKUOCS::RosbagRecordStop()
+{
+  system("rosnode kill `rosnode list | grep '^/record'`");
 }
 
 /*bool hasConfiguration() const

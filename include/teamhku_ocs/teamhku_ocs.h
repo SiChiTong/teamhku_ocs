@@ -33,6 +33,8 @@ public Q_SLOTS:
   void GoHome();
   void LocalNavigation();
   void GlobalNavigation();
+  void RosbagRecord();
+  void RosbagRecordStop();
 
   // Comment in to signal that the plugin has a way to configure it
   // bool hasConfiguration() const;
@@ -50,6 +52,7 @@ signals:
 protected: 
 	void SpinThread();
 	void UIUpdateThread();
+  void RecordThread();
 	
 private:
   Ui::MyPluginWidget ui_;
@@ -59,6 +62,7 @@ private:
   ros::NodeHandle nh_;
   boost::thread* spin_thread;
   boost::thread* ui_update_thread;
+  boost::thread* ui_record_thread;
   const std::string flight_status_arr_[6] = {"", "Ground Standby", "Taking Off", "Sky Standby", "Landing", "Finishing Landing"};
   const std::string control_status_arr_[3] = {"RC", "Mobile SDK", "Onboard SDK"};
   uint32_t channel_data[16] = {0};
