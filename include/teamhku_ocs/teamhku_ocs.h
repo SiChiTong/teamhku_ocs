@@ -10,6 +10,10 @@
 #include <actionlib/client/terminal_state.h>
 #include <cstdlib>
 #include <boost/thread.hpp>
+#include <QStringList>
+#include <QColor>
+#include <QDir>
+#include <QUrl>
 
 #include <string>
 namespace teamhku {
@@ -35,6 +39,9 @@ public Q_SLOTS:
   void GlobalNavigation();
   void RosbagRecord();
   void RosbagRecordStop();
+  void TakePicture();
+  void StartVideo();
+  void StopVideo();
 
   // Comment in to signal that the plugin has a way to configure it
   // bool hasConfiguration() const;
@@ -66,6 +73,7 @@ private:
   const std::string flight_status_arr_[6] = {"", "Ground Standby", "Taking Off", "Sky Standby", "Landing", "Finishing Landing"};
   const std::string control_status_arr_[3] = {"RC", "Mobile SDK", "Onboard SDK"};
   uint32_t channel_data[16] = {0};
+  void ShowMessage(QString msg, QColor color= Qt::black);
 
 };
 }  // namespace teamhku

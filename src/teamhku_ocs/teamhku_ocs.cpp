@@ -1,7 +1,5 @@
 #include "teamhku_ocs/teamhku_ocs.h"
 #include <pluginlib/class_list_macros.h>
-#include <QStringList>
-#include <QColor>
 #include <iostream>
 #include <unistd.h>
 #include <cmath>
@@ -50,6 +48,8 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   ui_.localYLineEdit->setReadOnly(true);
   ui_.localZLineEdit->setReadOnly(true);
 
+  ui_.MsgWin->setReadOnly(true);
+
   ui_.batteryProgressBar->setMinimum(0);
   ui_.batteryProgressBar->setMaximum(100);
   ui_.batteryProgressBar->setTextVisible(true);
@@ -68,7 +68,7 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
 
   // set color for the emergency button
   ui_.estop_button_->setAutoFillBackground(true);
-  ui_.estop_button_->setStyleSheet("border-image: url(/home/sunbacon/catkin_ws/src/teamhku_ocs/src/teamhku_ocs/large-red-circle.png) 15 15 15 15; border-radius: 45px;");
+  ui_.estop_button_->setStyleSheet("border-image: url("+QUrl::fromLocalFile(QFileInfo("catkin_ws/src/teamhku_ocs/src/teamhku_ocs/large-red-circle.png").absoluteFilePath()).toString().remove(0,7)+") 15 15 15 15; border-radius: 45px;");
   ui_.estop_button_->show();
 
   connect(ui_.take_off_button_, SIGNAL (clicked()),this, SLOT (TakeOff()));
@@ -81,6 +81,9 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   connect(ui_.global_navigation_button_, SIGNAL (clicked()), this, SLOT (GlobalNavigation()));
   connect(ui_.rosbag_button_, SIGNAL (clicked()), this, SLOT (RosbagRecord()));
   connect(ui_.rosstop_button_, SIGNAL (clicked()), this, SLOT (RosbagRecordStop()));
+  connect(ui_.take_picture_button_, SIGNAL (clicked()), this, SLOT (TakePicture()));
+  connect(ui_.start_video_button_, SIGNAL (clicked()), this, SLOT (StartVideo()));
+  connect(ui_.stop_video_button_, SIGNAL (clicked()), this, SLOT (StopVideo()));
   connect(this, SIGNAL (FlightStatusChanged()), this, SLOT(DisplayFlightStatus()));
   connect(this, SIGNAL (UILogicChanged()), this, SLOT(ChangeButton()));
 
@@ -326,6 +329,29 @@ void TeamHKUOCS::RosbagRecord()
 void TeamHKUOCS::RosbagRecordStop()
 {
   system("rosnode kill `rosnode list | grep '^/record'`");
+}
+
+void TeamHKUOCS::TakePicture()
+{
+  drone_->take_picture();
+}
+
+void TeamHKUOCS::StartVideo()
+{
+  drone_->start_video();
+}
+
+void TeamHKUOCS::StopVideo()
+{
+  drone_->stop_video();
+}
+
+void TeamHKUOCS::ShowMessage(QString msg, QColor color)
+{
+  ui_.MsgWin->moveCursor(QTextCursor::Start, QTextCursor::MoveAnchor);
+  ui_.MsgWin->setTextColor(color);
+  ui_.MsgWin->append(msg);
+
 }
 
 /*bool hasConfiguration() const

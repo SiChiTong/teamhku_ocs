@@ -343,7 +343,7 @@
     </widget>
    </widget>
   </widget>
-  <widget class="QTextEdit" name="textEdit">
+  <widget class="QTextEdit" name="MsgWin">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -363,7 +363,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -614,7 +614,7 @@
     <attribute name="title">
      <string>Camera Control</string>
     </attribute>
-    <widget class="QPushButton" name="pushButton_3">
+    <widget class="QPushButton" name="take_picture_button_">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -627,7 +627,7 @@
       <string>Take Picture</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_4">
+    <widget class="QPushButton" name="start_video_button_">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -640,7 +640,7 @@
       <string>Start Video</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_5">
+    <widget class="QPushButton" name="stop_video_button_">
      <property name="geometry">
       <rect>
        <x>20</x>
