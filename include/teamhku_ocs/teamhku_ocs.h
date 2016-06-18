@@ -42,6 +42,8 @@ public Q_SLOTS:
   void TakePicture();
   void StartVideo();
   void StopVideo();
+  void MoveGimbal();
+  void ResetGimbal();
 
   // Comment in to signal that the plugin has a way to configure it
   // bool hasConfiguration() const;

@@ -63,7 +63,7 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   ui_.take_off_button_->setEnabled(false);
   ui_.land_button_->setEnabled(false);
   ui_.go_home_button_->setEnabled(false);
-  ui_.move_gimbal_button_->setEnabled(false);
+  ui_.move_gimbal_button_->setEnabled(true);
   ui_.local_navigation_button_->setEnabled(false);
 
   // set color for the emergency button
@@ -84,6 +84,8 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   connect(ui_.take_picture_button_, SIGNAL (clicked()), this, SLOT (TakePicture()));
   connect(ui_.start_video_button_, SIGNAL (clicked()), this, SLOT (StartVideo()));
   connect(ui_.stop_video_button_, SIGNAL (clicked()), this, SLOT (StopVideo()));
+  connect(ui_.move_gimbal_button_, SIGNAL (clicked()), this, SLOT (MoveGimbal()));
+  connect(ui_.reset_gimbal_button_, SIGNAL (clicked()), this, SLOT (ResetGimbal()));
   connect(this, SIGNAL (FlightStatusChanged()), this, SLOT(DisplayFlightStatus()));
   connect(this, SIGNAL (UILogicChanged()), this, SLOT(ChangeButton()));
 
@@ -224,7 +226,6 @@ void TeamHKUOCS::ChangeButton()
       ui_.take_off_button_->setEnabled(true);
       ui_.land_button_->setEnabled(false);
       ui_.go_home_button_->setEnabled(false);
-      ui_.move_gimbal_button_->setEnabled(false);
       ui_.local_navigation_button_->setEnabled(false);
       ui_.global_navigation_button_->setEnabled(false);
     }
@@ -233,7 +234,6 @@ void TeamHKUOCS::ChangeButton()
       ui_.take_off_button_->setEnabled(false);
       ui_.land_button_->setEnabled(true);
       ui_.go_home_button_->setEnabled(true);
-      ui_.move_gimbal_button_->setEnabled(true);
       ui_.local_navigation_button_->setEnabled(true);
       ui_.global_navigation_button_->setEnabled(true);
     }
@@ -242,7 +242,6 @@ void TeamHKUOCS::ChangeButton()
       ui_.take_off_button_->setEnabled(false);
       ui_.land_button_->setEnabled(false);
       ui_.go_home_button_->setEnabled(false);
-      ui_.move_gimbal_button_->setEnabled(false);
       ui_.local_navigation_button_->setEnabled(false);
       ui_.global_navigation_button_->setEnabled(false);
     }
@@ -252,7 +251,6 @@ void TeamHKUOCS::ChangeButton()
     ui_.take_off_button_->setEnabled(false);
     ui_.land_button_->setEnabled(false);
     ui_.go_home_button_->setEnabled(false);
-    ui_.move_gimbal_button_->setEnabled(false);
     ui_.local_navigation_button_->setEnabled(false);
     ui_.global_navigation_button_->setEnabled(false);
   }
@@ -352,6 +350,18 @@ void TeamHKUOCS::ShowMessage(QString msg, QColor color)
   ui_.MsgWin->setTextColor(color);
   ui_.MsgWin->append(msg);
 
+}
+
+void TeamHKUOCS::MoveGimbal()
+{
+  drone_->gimbal_angle_control(ui_.gimbalXLineEdit->text().toInt(), ui_.gimbalYLineEdit->text().toInt(), ui_.gimbalZLineEdit->text().toInt(), ui_.gimbalsurationLineEdit->text().toInt(), ui_.absolute_check->checkState() == Qt::Checked);
+}
+
+void TeamHKUOCS::ResetGimbal()
+{
+  drone_->gimbal_angle_control((int)(-drone_->gimbal.roll*10), (int)(-drone_->gimbal.pitch*10), (int)(-drone_->gimbal.yaw*10-10), 10, 0);
+  sleep(1000);
+  drone_->gimbal_angle_control(0, 0, 0, 10, 1);
 }
 
 /*bool hasConfiguration() const
