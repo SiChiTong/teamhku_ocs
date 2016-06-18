@@ -360,7 +360,7 @@ void TeamHKUOCS::MoveGimbal()
 void TeamHKUOCS::ResetGimbal()
 {
   drone_->gimbal_angle_control((int)(-drone_->gimbal.roll*10), (int)(-drone_->gimbal.pitch*10), (int)(-drone_->gimbal.yaw*10-10), 10, 0);
-  sleep(1000);
+  sleep(1);
   drone_->gimbal_angle_control(0, 0, 0, 10, 1);
 }
 
