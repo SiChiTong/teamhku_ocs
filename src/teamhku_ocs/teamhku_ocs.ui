@@ -437,9 +437,9 @@
     <widget class="QWidget" name="formLayoutWidget_5">
      <property name="geometry">
       <rect>
-       <x>230</x>
+       <x>240</x>
        <y>10</y>
-       <width>189</width>
+       <width>221</width>
        <height>128</height>
       </rect>
      </property>
@@ -489,7 +489,7 @@
     <widget class="QPushButton" name="move_gimbal_button_">
      <property name="geometry">
       <rect>
-       <x>230</x>
+       <x>240</x>
        <y>140</y>
        <width>99</width>
        <height>27</height>
@@ -504,7 +504,7 @@
       <rect>
        <x>10</x>
        <y>210</y>
-       <width>160</width>
+       <width>221</width>
        <height>95</height>
       </rect>
      </property>
@@ -557,9 +557,9 @@
     <widget class="QWidget" name="formLayoutWidget_7">
      <property name="geometry">
       <rect>
-       <x>230</x>
+       <x>240</x>
        <y>210</y>
-       <width>161</width>
+       <width>221</width>
        <height>95</height>
       </rect>
      </property>
@@ -599,7 +599,7 @@
     <widget class="QPushButton" name="global_navigation_button_">
      <property name="geometry">
       <rect>
-       <x>230</x>
+       <x>240</x>
        <y>310</y>
        <width>131</width>
        <height>27</height>
@@ -612,7 +612,7 @@
     <widget class="QCheckBox" name="absolute_check">
      <property name="geometry">
       <rect>
-       <x>330</x>
+       <x>350</x>
        <y>140</y>
        <width>97</width>
        <height>22</height>
@@ -625,14 +625,40 @@
     <widget class="QPushButton" name="reset_gimbal_button_">
      <property name="geometry">
       <rect>
-       <x>230</x>
+       <x>240</x>
        <y>170</y>
-       <width>181</width>
+       <width>221</width>
        <height>27</height>
       </rect>
      </property>
      <property name="text">
       <string>Reset Gimbal pose</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="copy_local_button_">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>310</y>
+       <width>71</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Copy</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="copy_global_button_">
+     <property name="geometry">
+      <rect>
+       <x>390</x>
+       <y>310</y>
+       <width>71</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Copy</string>
      </property>
     </widget>
    </widget>
@@ -697,8 +723,8 @@
     <widget class="QPushButton" name="gimbal_track_button_">
      <property name="geometry">
       <rect>
-       <x>310</x>
-       <y>20</y>
+       <x>320</x>
+       <y>250</y>
        <width>141</width>
        <height>27</height>
       </rect>
@@ -710,8 +736,8 @@
     <widget class="QPushButton" name="position_track_button_">
      <property name="geometry">
       <rect>
-       <x>310</x>
-       <y>60</y>
+       <x>320</x>
+       <y>290</y>
        <width>141</width>
        <height>27</height>
       </rect>
@@ -723,9 +749,9 @@
     <widget class="QPushButton" name="land_on_AT_button_">
      <property name="geometry">
       <rect>
-       <x>310</x>
-       <y>140</y>
-       <width>99</width>
+       <x>318</x>
+       <y>370</y>
+       <width>141</width>
        <height>27</height>
       </rect>
      </property>
@@ -736,9 +762,9 @@
     <widget class="QPushButton" name="pushButton_6">
      <property name="geometry">
       <rect>
-       <x>310</x>
-       <y>100</y>
-       <width>99</width>
+       <x>318</x>
+       <y>330</y>
+       <width>141</width>
        <height>27</height>
       </rect>
      </property>
@@ -802,8 +828,8 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>210</y>
-       <width>99</width>
+       <y>330</y>
+       <width>121</width>
        <height>27</height>
       </rect>
      </property>
@@ -814,9 +840,9 @@
     <widget class="QPushButton" name="pause_mission_button_">
      <property name="geometry">
       <rect>
-       <x>150</x>
-       <y>210</y>
-       <width>99</width>
+       <x>20</x>
+       <y>370</y>
+       <width>121</width>
        <height>27</height>
       </rect>
      </property>
@@ -824,17 +850,44 @@
       <string>Pause Mission</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="stop_mission_button_">
+    <widget class="QPushButton" name="cancel_mission_button_">
      <property name="geometry">
       <rect>
-       <x>280</x>
-       <y>210</y>
-       <width>99</width>
+       <x>150</x>
+       <y>330</y>
+       <width>121</width>
        <height>27</height>
       </rect>
      </property>
      <property name="text">
-      <string>Stop Mission</string>
+      <string>Cancel Mission</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="resume_mission_button_">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>370</y>
+       <width>121</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Resume Mission</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="smart_demo_">
+     <property name="geometry">
+      <rect>
+       <x>288</x>
+       <y>70</y>
+       <width>141</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Smart Generate
+Demo Mission</string>
      </property>
     </widget>
    </widget>

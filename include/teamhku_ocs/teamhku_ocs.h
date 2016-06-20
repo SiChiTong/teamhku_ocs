@@ -37,6 +37,8 @@ public Q_SLOTS:
   void GoHome();
   void LocalNavigation();
   void GlobalNavigation();
+  void CopyLocal();
+  void CopyGlobal();
   void RosbagRecord();
   void RosbagRecordStop();
   void TakePicture();
@@ -44,6 +46,11 @@ public Q_SLOTS:
   void StopVideo();
   void MoveGimbal();
   void ResetGimbal();
+  void StartMission();
+  void PauseMission();
+  void ResumeMission();
+  void CancelMission();
+  void SmartDemo();
 
   // Comment in to signal that the plugin has a way to configure it
   // bool hasConfiguration() const;

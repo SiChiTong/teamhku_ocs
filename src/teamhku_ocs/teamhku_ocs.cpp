@@ -66,6 +66,12 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   ui_.move_gimbal_button_->setEnabled(true);
   ui_.local_navigation_button_->setEnabled(false);
 
+  //set the placeHolder of the gimbal move
+  ui_.gimbalXLineEdit->setPlaceholderText(QString("0"));
+  ui_.gimbalYLineEdit->setPlaceholderText(QString("0"));
+  ui_.gimbalZLineEdit->setPlaceholderText(QString("0"));
+  ui_.gimbalsurationLineEdit->setPlaceholderText(QString("10"));
+
   // set color for the emergency button
   ui_.estop_button_->setAutoFillBackground(true);
   ui_.estop_button_->setStyleSheet("border-image: url("+QUrl::fromLocalFile(QFileInfo("catkin_ws/src/teamhku_ocs/src/teamhku_ocs/large-red-circle.png").absoluteFilePath()).toString().remove(0,7)+") 15 15 15 15; border-radius: 45px;");
@@ -79,6 +85,8 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   connect(ui_.go_home_button_, SIGNAL (clicked()),this, SLOT (GoHome()));
   connect(ui_.local_navigation_button_, SIGNAL (clicked()), this, SLOT (LocalNavigation()));
   connect(ui_.global_navigation_button_, SIGNAL (clicked()), this, SLOT (GlobalNavigation()));
+  connect(ui_.copy_local_button_, SIGNAL (clicked()), this, SLOT (CopyLocal()));
+  connect(ui_.copy_global_button_, SIGNAL (clicked()), this, SLOT (CopyGlobal()));
   connect(ui_.rosbag_button_, SIGNAL (clicked()), this, SLOT (RosbagRecord()));
   connect(ui_.rosstop_button_, SIGNAL (clicked()), this, SLOT (RosbagRecordStop()));
   connect(ui_.take_picture_button_, SIGNAL (clicked()), this, SLOT (TakePicture()));
@@ -86,6 +94,11 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   connect(ui_.stop_video_button_, SIGNAL (clicked()), this, SLOT (StopVideo()));
   connect(ui_.move_gimbal_button_, SIGNAL (clicked()), this, SLOT (MoveGimbal()));
   connect(ui_.reset_gimbal_button_, SIGNAL (clicked()), this, SLOT (ResetGimbal()));
+  connect(ui_.start_mission_button_, SIGNAL (clicked()), this, SLOT (StartMission()));
+  connect(ui_.pause_mission_button_, SIGNAL (clicked()), this, SLOT (PauseMission()));
+  connect(ui_.resume_mission_button_, SIGNAL (clicked()), this, SLOT (ResumeMission()));
+  connect(ui_.cancel_mission_button_, SIGNAL (clicked()), this, SLOT (CancelMission()));
+  connect(ui_.smart_demo_, SIGNAL (clicked()), this, SLOT (SmartDemo()));
   connect(this, SIGNAL (FlightStatusChanged()), this, SLOT(DisplayFlightStatus()));
   connect(this, SIGNAL (UILogicChanged()), this, SLOT(ChangeButton()));
 
@@ -305,6 +318,19 @@ void TeamHKUOCS::GlobalNavigation()
   drone_->global_position_navigation_send_request(ui_.globalXLineEdit_->text().toDouble(), ui_.globalYLineEdit_->text().toDouble(), ui_.globalZLineEdit_->text().toDouble());
 }
 
+void TeamHKUOCS::CopyLocal()
+{
+  ui_.localXLineEdit_2->setText(ui_.localXLineEdit->text());
+  ui_.localYLineEdit_2->setText(ui_.localYLineEdit->text());
+  ui_.localZLineEdit_2->setText(ui_.localZLineEdit->text());
+}
+
+void TeamHKUOCS::CopyGlobal()
+{
+  ui_.globalXLineEdit_->setText(ui_.gPSLatitudeLineEdit->text());
+  ui_.globalYLineEdit_->setText(ui_.gPSLongitudeLineEdit->text());
+  ui_.globalZLineEdit_->setText(ui_.gPSAltitudeLineEdit->text());
+}
 
 void TeamHKUOCS::RecordThread()
 {
@@ -362,6 +388,32 @@ void TeamHKUOCS::ResetGimbal()
   drone_->gimbal_angle_control((int)(-drone_->gimbal.roll*10), (int)(-drone_->gimbal.pitch*10), (int)(-drone_->gimbal.yaw*10-10), 10, 0);
   sleep(1);
   drone_->gimbal_angle_control(0, 0, 0, 10, 1);
+}
+
+void TeamHKUOCS::StartMission()
+{
+  drone_->mission_start();
+}
+
+void TeamHKUOCS::PauseMission()
+{
+  drone_->mission_pause();
+}
+
+void TeamHKUOCS::ResumeMission()
+{
+  drone_->mission_resume();
+}
+
+void TeamHKUOCS::CancelMission()
+{
+  drone_->mission_cancel();
+  drone_->landing();
+}
+
+void TeamHKUOCS::SmartDemo()
+{
+  //TODO:: automatically generate the mission task
 }
 
 /*bool hasConfiguration() const
