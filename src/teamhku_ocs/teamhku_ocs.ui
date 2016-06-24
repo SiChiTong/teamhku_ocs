@@ -661,6 +661,58 @@
       <string>Copy</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="start_gimbal_track_button_">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>350</y>
+       <width>221</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Start Gimbal Track</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="stop_gimbal_track_button_">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>380</y>
+       <width>221</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Stop Gimbal Track</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="start_position_track_button_">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>350</y>
+       <width>221</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Start Position Track</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="stop_position_track_button_">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>380</y>
+       <width>221</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Stop Position Track</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -800,7 +852,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="area_longtitude_1"/>
+       <widget class="QLineEdit" name="area_longitude_1"/>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="gimbalZLabel_2">
@@ -813,7 +865,7 @@
        <widget class="QLineEdit" name="area_latitude_2"/>
       </item>
       <item row="3" column="1">
-       <widget class="QLineEdit" name="area_longtitude_2"/>
+       <widget class="QLineEdit" name="area_longitude_2"/>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="gimbalSpeedLabel_2">

@@ -67,10 +67,10 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   ui_.local_navigation_button_->setEnabled(false);
 
   //set the placeHolder of the gimbal move
-  ui_.gimbalXLineEdit->setPlaceholderText(QString("0"));
-  ui_.gimbalYLineEdit->setPlaceholderText(QString("0"));
-  ui_.gimbalZLineEdit->setPlaceholderText(QString("0"));
-  ui_.gimbalsurationLineEdit->setPlaceholderText(QString("10"));
+  ui_.gimbalXLineEdit->setText(QString("0"));
+  ui_.gimbalYLineEdit->setText(QString("0"));
+  ui_.gimbalZLineEdit->setText(QString("0"));
+  ui_.gimbalsurationLineEdit->setText(QString("10"));
 
   // set color for the emergency button
   ui_.estop_button_->setAutoFillBackground(true);
@@ -99,12 +99,20 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   connect(ui_.resume_mission_button_, SIGNAL (clicked()), this, SLOT (ResumeMission()));
   connect(ui_.cancel_mission_button_, SIGNAL (clicked()), this, SLOT (CancelMission()));
   connect(ui_.smart_demo_, SIGNAL (clicked()), this, SLOT (SmartDemo()));
+  connect(ui_.start_gimbal_track_button_, SIGNAL (clicked()), this, SLOT (StartGimbalTrack()));
+  connect(ui_.stop_gimbal_track_button_, SIGNAL (clicked()), this, SLOT (StopGimbalTrack()));
+  connect(ui_.start_position_track_button_, SIGNAL (clicked()), this, SLOT (StartPositionTrack()));
+  connect(ui_.stop_position_track_button_, SIGNAL (clicked()), this, SLOT (StopPositionTrack()));
   connect(this, SIGNAL (FlightStatusChanged()), this, SLOT(DisplayFlightStatus()));
   connect(this, SIGNAL (UILogicChanged()), this, SLOT(ChangeButton()));
 
 
   //spin_thread = new boost::thread(&TeamHKUOCS::SpinThread, (TeamHKUOCS*)this);
   ui_update_thread = new boost::thread(&TeamHKUOCS::UIUpdateThread, (TeamHKUOCS*)this);
+
+  //initialize the nh node and the publisher
+  gimbal_track_pub_ = nh_.advertise<std_msgs::Bool>("/teamhku/gimbal_track/gimbal_track_enable", 1);
+  position_track_pub_ = nh_.advertise<std_msgs::Bool>("/teamhku/position_track/position_track_enable", 1);
 }
 
 void TeamHKUOCS::shutdownPlugin()
@@ -385,7 +393,7 @@ void TeamHKUOCS::MoveGimbal()
 
 void TeamHKUOCS::ResetGimbal()
 {
-  drone_->gimbal_angle_control((int)(-drone_->gimbal.roll*10), (int)(-drone_->gimbal.pitch*10), (int)(-drone_->gimbal.yaw*10-10), 10, 0);
+  drone_->gimbal_angle_control((int)(-drone_->gimbal.roll*10), (int)(-drone_->gimbal.pitch*10), (int)(-drone_->gimbal.yaw*10), 10, 0);
   sleep(1);
   drone_->gimbal_angle_control(0, 0, 0, 10, 1);
 }
@@ -414,7 +422,60 @@ void TeamHKUOCS::CancelMission()
 void TeamHKUOCS::SmartDemo()
 {
   //TODO:: automatically generate the mission task
+  dji_sdk::MissionWaypointTask waypoint_task;
+  dji_sdk::MissionWaypoint   waypoint;
+  waypoint_task.velocity_range = 10;
+  waypoint_task.idle_velocity = 3;
+  waypoint_task.action_on_finish = 0;
+  waypoint_task.mission_exec_times = 1;
+  waypoint_task.yaw_mode = 4;
+  waypoint_task.trace_mode = 0;
+  waypoint_task.action_on_rc_lost = 0;
+  waypoint_task.gimbal_pitch_mode = 0;
+
+  double start_x = ui_.area_latitude_1->text().toDouble();
+  double start_y = ui_.area_longitude_1->text().toDouble();
+  double end_x = ui_.area_latitude_2->text().toDouble();
+  double end_y = ui_.area_longitude_2->text().toDouble();
+
+  for (int i=0; i<=10; i++)
+  {
+    waypoint.latitude = (1-i/10) * start_x + i/10 * end_x;
+    waypoint.longitude = i%2==0 ? start_y : end_y;
+    waypoint.altitude = 120;
+    waypoint.damping_distance = 0;
+    waypoint.target_yaw = i%2==0 ? 0 : 180;
+    waypoint.target_gimbal_pitch = 0;
+    waypoint.turn_mode = 0;
+    waypoint.has_action = 0;
+    waypoint_task.mission_waypoint.push_back(waypoint);
+  }
+
+  drone_->mission_waypoint_upload(waypoint_task);
 }
+
+void TeamHKUOCS::StartGimbalTrack()
+{
+  msg.data = true;
+  gimbal_track_pub_.publish(msg);
+}
+
+void TeamHKUOCS::StopGimbalTrack()
+{
+  msg.data = false;
+  gimbal_track_pub_.publish(msg);
+}
+void TeamHKUOCS::StartPositionTrack()
+{
+  msg.data = true;
+  position_track_pub_.publish(msg);
+}
+void TeamHKUOCS::StopPositionTrack()
+{
+  msg.data = false;
+  position_track_pub_.publish(msg);
+}
+
 
 /*bool hasConfiguration() const
 {

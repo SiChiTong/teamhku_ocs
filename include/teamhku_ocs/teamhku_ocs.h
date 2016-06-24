@@ -14,6 +14,8 @@
 #include <QColor>
 #include <QDir>
 #include <QUrl>
+#include <ros/ros.h>
+#include <std_msgs/Bool.h>
 
 #include <string>
 namespace teamhku {
@@ -51,6 +53,11 @@ public Q_SLOTS:
   void ResumeMission();
   void CancelMission();
   void SmartDemo();
+  void StartGimbalTrack();
+  void StopGimbalTrack();
+  void StartPositionTrack();
+  void StopPositionTrack();
+
 
   // Comment in to signal that the plugin has a way to configure it
   // bool hasConfiguration() const;
@@ -83,6 +90,9 @@ private:
   const std::string control_status_arr_[3] = {"RC", "Mobile SDK", "Onboard SDK"};
   uint32_t channel_data[16] = {0};
   void ShowMessage(QString msg, QColor color= Qt::black);
+  ros::Publisher gimbal_track_pub_;
+  ros::Publisher position_track_pub_;
+  std_msgs::Bool msg;
 
 };
 }  // namespace teamhku
