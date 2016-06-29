@@ -387,7 +387,7 @@
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>121</width>
+       <width>221</width>
        <height>27</height>
       </rect>
      </property>
@@ -400,7 +400,7 @@
       <rect>
        <x>10</x>
        <y>40</y>
-       <width>121</width>
+       <width>221</width>
        <height>27</height>
       </rect>
      </property>
@@ -432,71 +432,6 @@
      </property>
      <property name="text">
       <string>take off</string>
-     </property>
-    </widget>
-    <widget class="QWidget" name="formLayoutWidget_5">
-     <property name="geometry">
-      <rect>
-       <x>240</x>
-       <y>10</y>
-       <width>221</width>
-       <height>128</height>
-      </rect>
-     </property>
-     <layout class="QFormLayout" name="formLayout_5">
-      <item row="0" column="0">
-       <widget class="QLabel" name="gimbalXLabel">
-        <property name="text">
-         <string>Gimbal row goal:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="gimbalXLineEdit"/>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="gimbalYLabel">
-        <property name="text">
-         <string>Gimbal pitch goal:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="gimbalYLineEdit"/>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="gimbalZLabel">
-        <property name="text">
-         <string>Gimbal yaw goal:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="gimbalZLineEdit"/>
-      </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="gimbalsurationLineEdit"/>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="gimbalSpeedLabel">
-        <property name="text">
-         <string>Duration</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-    <widget class="QPushButton" name="move_gimbal_button_">
-     <property name="geometry">
-      <rect>
-       <x>240</x>
-       <y>140</y>
-       <width>99</width>
-       <height>27</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Move Gimbal</string>
      </property>
     </widget>
     <widget class="QWidget" name="formLayoutWidget_6">
@@ -609,32 +544,6 @@
       <string>Global Navigation</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="absolute_check">
-     <property name="geometry">
-      <rect>
-       <x>350</x>
-       <y>140</y>
-       <width>97</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>absolute</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="reset_gimbal_button_">
-     <property name="geometry">
-      <rect>
-       <x>240</x>
-       <y>170</y>
-       <width>221</width>
-       <height>27</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Reset Gimbal pose</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="copy_local_button_">
      <property name="geometry">
       <rect>
@@ -713,6 +622,120 @@
       <string>Stop Position Track</string>
      </property>
     </widget>
+    <widget class="QWidget" name="formLayoutWidget_12">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>10</y>
+       <width>221</width>
+       <height>141</height>
+      </rect>
+     </property>
+     <layout class="QFormLayout" name="formLayout_12">
+      <item row="0" column="0">
+       <widget class="QLabel" name="gimbalXLabel_4">
+        <property name="text">
+         <string>velocity x</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="velocity_x"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="gimbalYLabel_4">
+        <property name="text">
+         <string>velocity y</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="velocity_y"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="gimbalZLabel_4">
+        <property name="text">
+         <string>velocity z</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="velocity_z"/>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="velocity_yaw"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="gimbalSpeedLabel_4">
+        <property name="text">
+         <string>speed yaw</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="fLabel">
+        <property name="text">
+         <string>frequency</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="velocity_freq"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QPushButton" name="arm_button_">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>90</y>
+       <width>99</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>arm</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="disarm_button_">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>130</y>
+       <width>99</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>disarm</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="velocity_control_button_">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>170</y>
+       <width>131</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Velocity control</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="stop_button_">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>170</y>
+       <width>81</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Stop</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -721,8 +744,8 @@
     <widget class="QPushButton" name="take_picture_button_">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>20</y>
+       <x>30</x>
+       <y>220</y>
        <width>99</width>
        <height>27</height>
       </rect>
@@ -734,8 +757,8 @@
     <widget class="QPushButton" name="start_video_button_">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>60</y>
+       <x>30</x>
+       <y>260</y>
        <width>99</width>
        <height>27</height>
       </rect>
@@ -747,8 +770,8 @@
     <widget class="QPushButton" name="stop_video_button_">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>100</y>
+       <x>30</x>
+       <y>300</y>
        <width>99</width>
        <height>27</height>
       </rect>
@@ -760,11 +783,102 @@
     <widget class="QGraphicsView" name="graphicsView">
      <property name="geometry">
       <rect>
-       <x>170</x>
-       <y>20</y>
+       <x>180</x>
+       <y>220</y>
        <width>271</width>
        <height>191</height>
       </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="reset_gimbal_button_">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>170</y>
+       <width>221</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Reset Gimbal pose</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="move_gimbal_button_">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>140</y>
+       <width>99</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Move Gimbal</string>
+     </property>
+    </widget>
+    <widget class="QWidget" name="formLayoutWidget_5">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>10</y>
+       <width>221</width>
+       <height>128</height>
+      </rect>
+     </property>
+     <layout class="QFormLayout" name="formLayout_5">
+      <item row="0" column="0">
+       <widget class="QLabel" name="gimbalXLabel">
+        <property name="text">
+         <string>Gimbal row goal:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="gimbalXLineEdit"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="gimbalYLabel">
+        <property name="text">
+         <string>Gimbal pitch goal:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="gimbalYLineEdit"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="gimbalZLabel">
+        <property name="text">
+         <string>Gimbal yaw goal:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="gimbalZLineEdit"/>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="gimbalsurationLineEdit"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="gimbalSpeedLabel">
+        <property name="text">
+         <string>Duration</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QCheckBox" name="absolute_check">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>140</y>
+       <width>97</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>absolute</string>
      </property>
     </widget>
    </widget>

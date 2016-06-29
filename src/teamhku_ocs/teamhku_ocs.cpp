@@ -30,6 +30,8 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   // add widget to the user interface
   context.addWidget(widget_);
 
+  velocity_control_on = false;
+
   ui_.accelerationXLineEdit->setReadOnly(true);
   ui_.accelerationYLineEdit->setReadOnly(true);
   ui_.accelerationZLineEdit->setReadOnly(true);
@@ -72,6 +74,12 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   ui_.gimbalZLineEdit->setText(QString("0"));
   ui_.gimbalsurationLineEdit->setText(QString("10"));
 
+  ui_.velocity_x->setText(QString("0"));
+  ui_.velocity_y->setText(QString("0"));
+  ui_.velocity_z->setText(QString("0"));
+  ui_.velocity_yaw->setText(QString("0"));
+  ui_.velocity_freq->setText(QString("200"));
+
   // set color for the emergency button
   ui_.estop_button_->setAutoFillBackground(true);
   ui_.estop_button_->setStyleSheet("border-image: url("+QUrl::fromLocalFile(QFileInfo("catkin_ws/src/teamhku_ocs/src/teamhku_ocs/large-red-circle.png").absoluteFilePath()).toString().remove(0,7)+") 15 15 15 15; border-radius: 45px;");
@@ -103,12 +111,18 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
   connect(ui_.stop_gimbal_track_button_, SIGNAL (clicked()), this, SLOT (StopGimbalTrack()));
   connect(ui_.start_position_track_button_, SIGNAL (clicked()), this, SLOT (StartPositionTrack()));
   connect(ui_.stop_position_track_button_, SIGNAL (clicked()), this, SLOT (StopPositionTrack()));
+  connect(ui_.arm_button_, SIGNAL (clicked()), this, SLOT (Arm()));
+  connect(ui_.disarm_button_, SIGNAL (clicked()), this, SLOT (Disarm()));
+  connect(ui_.velocity_control_button_, SIGNAL (clicked()), this, SLOT (VelocityControlStart()));
+  connect(ui_.stop_button_, SIGNAL (clicked()), this, SLOT (VelocityControlStop()));
+
   connect(this, SIGNAL (FlightStatusChanged()), this, SLOT(DisplayFlightStatus()));
   connect(this, SIGNAL (UILogicChanged()), this, SLOT(ChangeButton()));
 
 
   //spin_thread = new boost::thread(&TeamHKUOCS::SpinThread, (TeamHKUOCS*)this);
   ui_update_thread = new boost::thread(&TeamHKUOCS::UIUpdateThread, (TeamHKUOCS*)this);
+
 
   //initialize the nh node and the publisher
   gimbal_track_pub_ = nh_.advertise<std_msgs::Bool>("/teamhku/gimbal_track/gimbal_track_enable", 1);
@@ -118,9 +132,16 @@ void TeamHKUOCS::initPlugin(qt_gui_cpp::PluginContext& context)
 void TeamHKUOCS::shutdownPlugin()
 {
   ros::shutdown();
-  spin_thread->join();
+  if (spin_thread != NULL)
+  {
+    spin_thread->join();
+  }
   ui_update_thread->join();
-  ui_record_thread->join();
+  if (ui_record_thread != NULL)
+  {
+    ui_record_thread->join();
+  }
+  std::cout<<"All thread shut down!\n";
   // TODO unregister all publishers here
 }
 
@@ -476,6 +497,36 @@ void TeamHKUOCS::StopPositionTrack()
   position_track_pub_.publish(msg);
 }
 
+void TeamHKUOCS::Arm()
+{
+  drone_->drone_arm();
+}
+
+void TeamHKUOCS::Disarm()
+{
+  drone_->drone_disarm();
+}
+
+void TeamHKUOCS::VelocityControlThread()
+{
+  ros::Rate loop_rate(ui_.velocity_freq->text().toInt());
+  while (ros::ok() && velocity_control_on)
+  {
+    drone_->velocity_control(0, ui_.velocity_x->text().toDouble(), ui_.velocity_y->text().toDouble(), ui_.velocity_z->text().toDouble(), ui_.velocity_yaw->text().toDouble());
+    loop_rate.sleep();
+  }
+}
+
+void TeamHKUOCS::VelocityControlStart()
+{
+  velocity_control_on = true;
+  velocity_control_thread = new boost::thread(&TeamHKUOCS::VelocityControlThread, (TeamHKUOCS*)this);
+}
+
+void TeamHKUOCS::VelocityControlStop()
+{
+  velocity_control_on = false;
+}
 
 /*bool hasConfiguration() const
 {

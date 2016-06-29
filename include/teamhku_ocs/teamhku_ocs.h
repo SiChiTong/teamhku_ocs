@@ -57,6 +57,10 @@ public Q_SLOTS:
   void StopGimbalTrack();
   void StartPositionTrack();
   void StopPositionTrack();
+  void Arm();
+  void Disarm();
+  void VelocityControlStart();
+  void VelocityControlStop();
 
 
   // Comment in to signal that the plugin has a way to configure it
@@ -76,6 +80,7 @@ protected:
 	void SpinThread();
 	void UIUpdateThread();
   void RecordThread();
+  void VelocityControlThread();
 	
 private:
   Ui::MyPluginWidget ui_;
@@ -86,6 +91,7 @@ private:
   boost::thread* spin_thread;
   boost::thread* ui_update_thread;
   boost::thread* ui_record_thread;
+  boost::thread* velocity_control_thread;
   const std::string flight_status_arr_[6] = {"", "Ground Standby", "Taking Off", "Sky Standby", "Landing", "Finishing Landing"};
   const std::string control_status_arr_[3] = {"RC", "Mobile SDK", "Onboard SDK"};
   uint32_t channel_data[16] = {0};
@@ -93,6 +99,7 @@ private:
   ros::Publisher gimbal_track_pub_;
   ros::Publisher position_track_pub_;
   std_msgs::Bool msg;
+  bool velocity_control_on;
 
 };
 }  // namespace teamhku
